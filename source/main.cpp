@@ -110,8 +110,9 @@ int main(int argc, char ** argv) {
     }
 
     if (!outputFileNameSet) {
-        outputFileName = new char_t[512];
-        sprintf(outputFileName, "communities.dat");
+		const char  DFL_OUTPNAME[] = "communities.dat";
+        outputFileName = new char_t[sizeof DFL_OUTPNAME];
+        sprintf(outputFileName, DFL_OUTPNAME);
     }
 
     CGraph graph;

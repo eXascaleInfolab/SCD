@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <sys/time.h>
 #include <omp.h>
 #include <cstdlib>
+#include <sstream>
 
 namespace scd {
 
@@ -97,10 +98,26 @@ namespace scd {
 		}
 		uint32_t index = 0;
 		m_NumEdges = 0;
-		uint32_t node1;
-		while( inFile >> node1 ) {
+		std::string  line;
+		// Note: only undirected unweighted networks are supported, otherwise
+		// show warning and skip the weights
+		bool weighted = false;  // Whether weights are specified in the input file
+		using std::ios_base;
+		
+		// Read file in the simple nsL (nsa, nse) format
+		while(std::getline(inFile, line)) {
+			// Skip empty lines and comments from the simple .nsL (nsa/nse) file
+			if(!line.size() || line[0] == '#')
+				continue;
+			std::stringstream  vals(line, ios_base::in);
+			vals.exceptions(std::istream::failbit);
+			
+			uint32_t node1;
+			vals >> node1;
 			uint32_t node2;
-			inFile >> node2;
+			vals >> node2;
+			if(vals)
+				weighted = true;
 
 			if(!mapa->count(node1)) {
 				mapa->insert(std::pair<uint32_t,uint32_t>(node1,index));
@@ -113,6 +130,10 @@ namespace scd {
 			}
 			m_NumEdges++;
 		}
+		// Show warning about the skipped weights if required
+		if(weighted)
+			fputs("WARNING, links weighs are skipped, the input network should be undirected and UNWEIGHTED\n", stderr);
+
 		gettimeofday(&time, NULL);
 		uint64_t endTime = (time.tv_sec * 1000) + (time.tv_usec / 1000);
 		printf("Graph: Nodes relabeled in %lu ms\n", endTime - initTime);
@@ -136,9 +157,15 @@ namespace scd {
 		}
 
 		//Compute the degree of each node.
-		while( inFile >> node1 ) {
+		while(std::getline(inFile, line)) {
+			// Skip empty lines and comments from the simple .nsL (nsa/nse) file
+			if(!line.size() || line[0] == '#')
+				continue;
+			std::stringstream  vals(line, ios_base::in);
+			uint32_t node1;
+			vals >> node1;
 			uint32_t node2;
-			inFile >> node2;
+			vals >> node2;
 			m_Nodes[(*mapa->find(node1)).second].m_Degree++;
 			m_Nodes[(*mapa->find(node2)).second].m_Degree++;
 		}
@@ -178,9 +205,15 @@ namespace scd {
 		}
 
 		//Filling adjacencies
-		while( inFile >> node1 ) {
+		while(std::getline(inFile, line)) {
+			// Skip empty lines and comments from the simple .nsL (nsa/nse) file
+			if(!line.size() || line[0] == '#')
+				continue;
+			std::stringstream  vals(line, ios_base::in);
+			uint32_t node1;
+			vals >> node1;
 			uint32_t node2;
-			inFile >> node2;
+			vals >> node2;
 			uint32_t tail = (*mapa->find(node1)).second;
 			uint32_t head = (*mapa->find(node2)).second;
 			assert(counters[tail]<m_Nodes[tail].m_Degree);
