@@ -116,7 +116,7 @@ namespace scd {
 			vals >> node1;
 			uint32_t node2;
 			vals >> node2;
-			if(vals)
+			if(vals.rdbuf()->in_avail() > 0)  // -1, 0 means end of stream or no any data
 				weighted = true;
 
 			if(!mapa->count(node1)) {
