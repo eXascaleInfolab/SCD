@@ -94,6 +94,8 @@ int main(int argc, char ** argv) {
         CHECK_ARGUMENT_STRING(i, "-p", partitionFileName, partitionFileNameSet)
         CHECK_ARGUMENT_INT(i, "-n", numThreads, numThreadsSet)
         CHECK_ARGUMENT_INT(i, "-l", lookahead, lookaheadSet)
+        // Note: alfa > 1 may cause a negative denominator, which is not verified.
+        // It can be thought as a resolution (scale) parameter.
         CHECK_ARGUMENT_FLOAT(i, "-a", alfa, alfaSet)
     }
 
