@@ -7,6 +7,9 @@ This program is an implementation of the community detection algorithm described
 
 [Put Three and Three Together: Triangle-Driven Community Detection.](http://dl.acm.org/citation.cfm?id=2775108) Arnau Prat-Prez, David Dominguez-Sal, Josep-M. Brunat, Josep-Lluis Larriba Pey - TKDD.
 
+> This is a slightly refactored version of the original SCD extended with the I/O formats to be natively applicable for the [Clubmark](https://github.com/eXascaleInfolab/clubmark) clustering benchmark.  
+Extended by Artem Lutov <artem@exascale.info>
+
 
 Compile
 ===
@@ -81,3 +84,13 @@ Into the build folder, a folder named tools is automatically created and contain
       * Usage: wcc -f [graph file name] -p [partition file name]
   * f1score: Computes the f1score between two partitions.
       * Usage: f1score [partition file name 1] [partition file name 2]
+
+
+Related Projects
+===
+
+- [xmeasures](https://github.com/eXascaleInfolab/xmeasures)  - Extrinsic quality (accuracy) measures evaluation for the overlapping clustering on large datasets: family of mean F1-Score (including clusters labeling), Omega Index (fuzzy version of the Adjusted Rand Index) and standard NMI (for non-overlapping clusters).
+- [GenConvNMI](https://github.com/eXascaleInfolab/GenConvNMI) - Overlapping NMI evaluation that is compatible with the original NMI (unlike the `onmi`).
+- [OvpNMI](https://github.com/eXascaleInfolab/OvpNMI) - Another method of the NMI evaluation for the overlapping clusters (communities) that is not compatible with the standard NMI value unlike GenConvNMI, but it is much faster and yields exact results unlike probabilistic results with some variance in GenConvNMI.
+- [Clubmark](https://github.com/eXascaleInfolab/clubmark) - A parallel isolation framework for benchmarking and profiling clustering (community detection) algorithms considering overlaps (covers).
+- [ExecTime](https://bitbucket.org/lumais/exectime/)  - A lightweight resource consumption (RSS RAM, CPU, etc.) profiler.
